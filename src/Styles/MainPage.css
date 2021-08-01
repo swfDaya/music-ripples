@@ -1,0 +1,56 @@
+.topBarContainer {
+    background-color: #060606;
+    /* border-bottom: 1px solid #2f3030; */
+}
+
+.middleContainer {
+    background-image: linear-gradient( #040404, #1b1e1e );
+    color: white
+}
+
+.bottomBarContainer {
+    
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .topBarContainer {
+    }
+    .bottomBarContainer {
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .topBarContainer {
+    }
+    .bottomBarContainer {
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .mainPage{
+        background-color: 
+    }
+    .topBarContainer {
+    }
+    .bottomBarContainer {
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .topBarContainer {
+    }
+    .bottomBarContainer {
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .topBarContainer {
+    }
+    .bottomBarContainer {
+    }
+}

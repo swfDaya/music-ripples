@@ -1,0 +1,129 @@
+.bannerContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.bannerContainerTop {
+    display: flex;
+    /* background-color: teal; */
+}
+
+.bannerContainerMiddle {
+    display: flex;
+}
+
+.bannerContainerBottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.bannerDots {
+    height: 70%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.bannerScrollContainer {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.bannerLargeScreenContainer {
+    display: flex;
+    flex-direction: row;
+    overflow: scroll;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .bannerContainer {
+        height: 300px;
+    }
+    .bannerContainerTop {
+        min-height: 50px;
+        max-height: 50px;
+    }
+    .bannerContainerMiddle {
+        min-height: 200px;
+        max-height: 200px;
+    }
+    .bannerContainerBottom {
+        min-height: 50px;
+        max-height: 50px;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .bannerContainer {
+        height: 50%;
+    }
+    .bannerContainerTop {
+        min-height: 17%;
+        max-height: 17%;
+    }
+    .bannerContainerMiddle {
+        min-height: 66%;
+        max-height: 66%;
+    }
+    .bannerContainerBottom {
+        min-height: 17%;
+        max-height: 17%;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .bannerContainer {
+        height: 50%;
+    }
+    .bannerContainerTop {
+        min-height: 17%;
+        max-height: 17%;
+    }
+    .bannerContainerMiddle {
+        min-height: 66%;
+        max-height: 66%;
+    }
+    .bannerContainerBottom {
+        min-height: 17%;
+        max-height: 17%;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .bannerContainer {
+        height: 50%;
+    }
+    .bannerContainerTop {
+        flex: 0.5;
+    }
+    .bannerContainerMiddle {
+        flex: 2;
+    }
+    .bannerContainerBottom {
+        flex: 0.5;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+}
+.bannerContainer {
+    height: 50%;
+}
+.bannerContainerTop {
+    flex: 0.5;
+}
+.bannerContainerMiddle {
+    flex: 2;
+}
+.bannerContainerBottom {
+    flex: 0.5;
+}
