@@ -53,7 +53,6 @@ const BannerComponentContextProvider = ( props ) => {
     }
 
     const fetchBgColor = ( name ) => {
-        console.log(name)
         var array = listBannerContent.filter( item => item.name === name )
         return array[0].bgColor
     }

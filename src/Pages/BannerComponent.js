@@ -57,16 +57,16 @@ const BannerComponent = () => {
 
     const scrollLeft = () => {
         if ( currentScrollPosition/Number(wWidth - (0.065 * wHeight)) < 4 ) {
-            bannerScroll.current.scrollLeft = currentScrollPosition + Number(wWidth - (0.065 * wHeight))
-            setCurrentScrollPosition( currentScrollPosition + Number(wWidth - (0.065 * wHeight)) )
+            bannerScroll.current.scrollLeft = currentScrollPosition + Math.floor(Number(wWidth - (0.065 * wHeight)))
+            setCurrentScrollPosition( currentScrollPosition + Math.floor(Number(wWidth - (0.065 * wHeight))) )
             setVisibleIndex( visibleIndex + 1 )
         }
     }
 
     const scrollRight = () => {
         if ( currentScrollPosition/Number(wWidth - (0.065 * wHeight)) > 0 ) {
-            bannerScroll.current.scrollLeft = currentScrollPosition - Number(wWidth - (0.065 * wHeight))
-            setCurrentScrollPosition( currentScrollPosition - Number(wWidth - (0.065 * wHeight)) )
+            bannerScroll.current.scrollLeft = currentScrollPosition - Math.floor(Number(wWidth - (0.065 * wHeight)))
+            setCurrentScrollPosition( currentScrollPosition - Math.floor(Number(wWidth - (0.065 * wHeight))) )
             setVisibleIndex( visibleIndex - 1 )
         }
     }
@@ -82,9 +82,23 @@ const BannerComponent = () => {
         className = { classNames('bannerContainer') }
         >
             <div
-            className = { classNames('bannerContainerTop') }
+            className = { classNames('bannerSpacer') }
             >
 
+            </div>
+            <div
+            className = { classNames('bannerContainerTop', 'toCenter') }
+            >
+                <div
+                className = { classNames('bannerNamecontainer') }
+                style = {{
+                    height: '100%',
+                    width: ( wWidth > 1599 ? 1600 : wWidth ) - (0.065 * wHeight),
+                    scrollBehavior: 'smooth'
+                }}
+                >
+                    {titleBannerContent}
+                </div>
             </div>
             <div
             className = { classNames('bannerContainerMiddle', 'toCenter') }
@@ -106,7 +120,6 @@ const BannerComponent = () => {
                             minWidth: (( wWidth > 1599 ? 1600 : wWidth ) - (0.065 * wHeight)) * 0.1,
                         }}
                         >
-
                         </div>
                         {
                             dataBannerContent.map(
@@ -158,7 +171,6 @@ const BannerComponent = () => {
                             minWidth: (( wWidth > 1599 ? 1600 : wWidth ) - (0.065 * wHeight)) * 0.15,
                         }}
                         >
-
                         </div>
                     </div>
                     :
@@ -167,7 +179,7 @@ const BannerComponent = () => {
                     ref = {bannerScroll}
                     style = {{
                         height: '100%',
-                        width: wWidth - (0.065 * wHeight),
+                        width: Math.floor(wWidth - (0.065 * wHeight)),
                         scrollBehavior: 'smooth'
                     }}
                     >
@@ -184,14 +196,14 @@ const BannerComponent = () => {
                                             className = { classNames('toCenter') }
                                             style = {{
                                                 height: '100%',
-                                                minWidth: wWidth - (0.065 * wHeight),
+                                                minWidth: Math.floor(wWidth - (0.065 * wHeight)),
                                                 backgroundColor: fetchBgColor( item.name ),
                                                 borderRadius: 10
                                             }}
                                             >
                                                 <img
                                                 style = {{
-                                                    height: '100%'
+                                                    height: '100%',
                                                 }}
                                                 src = { item.source }
                                                 alt = ''
@@ -223,8 +235,8 @@ const BannerComponent = () => {
                                     className = { classNames('clickable') }
                                     onClick = { () => scrollToBannerLargeScreen(item) }
                                     style = {{
-                                        height: visibleIndexLargeScreen === item ? 0.02 * wHeight : 0.01 * wHeight,
-                                        width: visibleIndexLargeScreen === item ? 0.02 * wHeight : 0.01 * wHeight,
+                                        height: visibleIndexLargeScreen === item ? 0.02 * wHeight : 0.012 * wHeight,
+                                        width: visibleIndexLargeScreen === item ? 0.02 * wHeight : 0.012 * wHeight,
                                         backgroundColor: visibleIndexLargeScreen === item ? 'white' : '#7f7f7f',
                                         borderRadius: '100%'
                                     }}
