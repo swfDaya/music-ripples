@@ -40,7 +40,8 @@ const YourFavoritesContextProvider = ( props ) => {
         var tempImage = new Image()
         if ( indexListFav > -1 ) {
             listYourFavorites.splice( indexListFav, 1 )
-            var indexDataFav = dataYourFavorites.findIndex( item => item.name === content )
+            forceUpdate()
+            var indexDataFav = dataYourFavorites.findIndex( item => item.id === content )
             dataYourFavorites.splice( indexDataFav, 1 )
             forceUpdate()
         }

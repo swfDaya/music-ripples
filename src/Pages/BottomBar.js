@@ -16,6 +16,7 @@ import { faPlay, faBackward, faForward, faPause, faWaveSquare } from '@fortaweso
 import { useHistory, useLocation } from 'react-router-dom'
 import Range from 'react-range-progress'
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { CentralDataContext } from '../Context Providers/CentralDataContextProvider'
 
 const BottomBar = () => {
 
@@ -29,11 +30,9 @@ const BottomBar = () => {
         setHeight(window.innerHeight)
     })
 
-    const [ hasPicLoaded, setHasPicLoaded ] = useState(false)
-    console.log(hasPicLoaded)
-
+    const { fetchSongData, fetchSongQueue } = useContext(CentralDataContext)
     const { isPlayerActive, setIsPlayerActive } = useContext(PlayerContext)
-    const { selectedSongImage } = useContext(AudioDataContext)
+    const { selectedSongImage, selectedSong, hasPicLoaded, setHasPicLoaded, shufflePlayerArray, setSelectedSong, fetchSelectedSongImage } = useContext(AudioDataContext)
 
     const alterPlayerPage = () => {
         if ( isPlayerActive ) {
@@ -44,6 +43,13 @@ const BottomBar = () => {
             setIsPlayerActive( true )
             history.push('/player')
         }
+    }
+
+    const shufflePlayerQueue = () => {
+        setHasPicLoaded(false)
+        var tempSongID = shufflePlayerArray()
+        setSelectedSong(...fetchSongData(tempSongID))
+        fetchSelectedSongImage(tempSongID)
     }
 
     return (
@@ -226,7 +232,7 @@ const BottomBar = () => {
                             width: '100%',
                         }}
                         >
-                        Walk in the night in the rain - You know who it is
+                        {selectedSong.songName} - {selectedSong.artistName}
                         </div>
                     </div>
                 </div>
@@ -245,6 +251,7 @@ const BottomBar = () => {
                     }}
                     >
                         <img
+                        onClick = { () => shufflePlayerQueue() }
                         className = { classNames('clickable') }
                         style = {{
                             height: '50%',

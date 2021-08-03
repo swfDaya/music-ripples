@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 import classNames from 'classnames'
 import { useWindowResize } from 'beautiful-react-hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,6 +6,7 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { PlayerContext } from '../Context Providers/PlayerContextProvider'
 import { CentralDataContext } from '../Context Providers/CentralDataContextProvider'
 import { AudioDataContext } from '../Context Providers/AudioDataContextProvider'
+import { YourFavoritesContext } from '../Context Providers/YourFavoritesContextProvider'
 import '../Styles/Player.css'
 
 const Player = () => {
@@ -20,9 +21,9 @@ const Player = () => {
 
     const { isPlayerActive, setIsPlayerActive } = useContext(PlayerContext)
     const { fetchSongData, fetchSongQueue } = useContext(CentralDataContext)
-    const { currentSongQueue, setCurrentSongQueue, selectedSongImage, setSelectedImage, selectedSong, setSelectedSong } = useContext(AudioDataContext)
-
-    setIsPlayerActive(true)
+    const { currentSongQueue, setCurrentSongQueue, selectedSongImage, setSelectedImage, selectedSong, setSelectedSong, fetchSelectedSongImage,
+            hasPicLoaded, setHasPicLoaded } = useContext(AudioDataContext)
+    const { listYourFavorites, alterYourFavorites } = useContext(YourFavoritesContext)
 
     const tempArray = [1,2,3,4,5,6,7,8,9,1,2,3,4,5]
 
@@ -33,6 +34,22 @@ const Player = () => {
         const second = runTime - (minute * 60)
         return minute + ':' + (second < 10 ? '0' + second  : second)
     }
+
+    const onSongClickInPlayerQueue = ( songID ) => {
+        setHasPicLoaded(false)
+        setSelectedSong(...fetchSongData(songID))
+        fetchSelectedSongImage(songID)
+    }
+
+    const playerQueue = useRef(null)
+
+    useEffect(
+        () => {
+            setIsPlayerActive(true)
+            var tempIndex = currentSongQueue.findIndex(item => item === selectedSong.songID )
+            playerQueue.current.scrollTop = (0.075 * wHeight) * tempIndex
+        }, []
+    )
 
     return (
 
@@ -45,6 +62,7 @@ const Player = () => {
         >
             <div
             className = { classNames('playerContainer') }
+            ref = {playerQueue}
             style = {{
                 height: '100%',
                 width: wWidth > 991 ? '60%' : ( wWidth - (0.065 * wHeight) ),
@@ -73,7 +91,8 @@ const Player = () => {
                                     }}
                                     >
                                         <div
-                                        className = { classNames('songNameContainer') }
+                                        onClick = { () => onSongClickInPlayerQueue(item.songID) }
+                                        className = { classNames('songNameContainer', 'clickable') }
                                         >
                                             <div
                                             className = { classNames('songNameContent') }
@@ -98,8 +117,11 @@ const Player = () => {
                                         }}
                                         >
                                             <FontAwesomeIcon
+                                            className = { classNames('clickable') }
+                                            onClick = { () => alterYourFavorites( item.songID ) }
                                             style = {{
-                                                height: '35%', width: '35%', color: 'white'
+                                                height: '35%', width: '35%', 
+                                                color: listYourFavorites.includes(item.songID) ? '#b92b27' : 'white'
                                             }}
                                             icon = {faHeart}
                                             />

@@ -4,8 +4,12 @@ import '../Styles/SquareSong.css'
 import { useWindowResize } from 'beautiful-react-hooks'
 import { CentralDataContext } from "../Context Providers/CentralDataContextProvider";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { useHistory, useLocation } from 'react-router-dom'
+import { AudioDataContext } from '../Context Providers/AudioDataContextProvider'
 
 const SquareSong = ( props ) => {
+
+    const history = useHistory()
 
     const [ wWidth, setWidth ] = useState(window.innerWidth)
     const [ wHeight, setHeight ] = useState(window.innerHeight)
@@ -17,8 +21,23 @@ const SquareSong = ( props ) => {
 
     const { fetchSongData } = useContext(CentralDataContext)
     const [ squareSongContent, setSquareSongContent ] = useState(...fetchSongData(props.id))
+    const { currentSongQueue, setCurrentSongQueue, selectedSongImage, setSelectedImage, selectedSong, setSelectedSong, fetchSelectedSongImage,
+        hasPicLoaded, setHasPicLoaded, addToSongQueue } = useContext(AudioDataContext)
 
-    const [ hasPicLoaded, setHasPicLoaded ] = useState(false)
+    const [ hasSquarePicLoaded, setHasSquarePicLoaded ] = useState(false)
+
+    const onSquareClick = ( id ) => {
+        if ( props.type === 'song' ) {
+            setHasPicLoaded(false)
+            setSelectedSong(...fetchSongData(id))
+            fetchSelectedSongImage(id)
+            addToSongQueue(id)
+            history.push('/player')
+        }
+        else {
+            history.push(`/theme/${id}`)
+        }
+    }
 
     return (
 
@@ -52,18 +71,19 @@ const SquareSong = ( props ) => {
                 }}
                 >
                     <img
+                    onClick = { () => onSquareClick( props.id ) }
                     className = { classNames('squareSongContentImage') }
                     style = {{
-                        display: hasPicLoaded ? 'flex' : 'none'
+                        display: hasSquarePicLoaded ? 'flex' : 'none'
                     }}
                     // onClick = {() => showPlayer()}
                     src = {props.source}
                     alt =''
-                    onLoad = {() => setHasPicLoaded(true)}
+                    onLoad = {() => setHasSquarePicLoaded(true)}
                     />
                     <div
                     style = {{
-                        display: hasPicLoaded ? 'none' : 'flex'
+                        display: hasSquarePicLoaded ? 'none' : 'flex'
                     }}
                     >
                     <SkeletonTheme 

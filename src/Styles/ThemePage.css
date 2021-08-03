@@ -1,18 +1,73 @@
-.player {
+.themePage {
     display: flex;
     flex-direction: column;
     font-size: 62.5%;
 }
 
-.songContainerSpacer {
+.themePageContainer {
     display: flex;
     flex-direction: column;
 }
 
-.playerContainer {
+.themePageBannerContainer {
+    width: 100%;
+    background-color: #b92b27;
+    border-radius: 10px;
     display: flex;
+    flex-direction: row;
+}
+
+.themeImageContent {
+    height: 85%;
+    width: 85%;
+    background-color: '#202020';
+    border-radius: 10px;
+}
+
+.themeImage {
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.themePagePlayerContainer {
+    display: flex;
+    width: 100%;
     flex-direction: column;
     overflow: scroll;
+}
+
+.themeDetailsContainer {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.themeNameContainer {
+    display: flex;
+    flex: 3;
+    align-items: flex-end;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.themeQueueDetailsContainer {
+    display: flex;
+    flex: 2;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.themeQueueButtonsContainer {
+    display: flex;
+    flex: 2;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.themeQueueButtonsSquare {
+    background-color: white;
+    border-radius: 5px;
 }
 
 .songContainer {
@@ -49,20 +104,25 @@
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
+
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
+
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
+
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
+
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
+
 }

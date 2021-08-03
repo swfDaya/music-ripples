@@ -10,6 +10,7 @@ import HomePage from './HomePage'
 import ExplorePage from './ExplorePage'
 import Player from './Player'
 import HomeRedirect from './HomeRedirect'
+import ThemePage from './ThemePage'
 
 const MainPage = () => {
 
@@ -69,6 +70,12 @@ const MainPage = () => {
                     exact path = '/player'
                     children = {
                         <Player />
+                    }
+                    />
+                    <Route
+                    exact path = '/theme/:themeType'
+                    children = {
+                        <ThemePage />
                     }
                     />
                 </Switch>

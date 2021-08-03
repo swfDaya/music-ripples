@@ -4,8 +4,11 @@ import '../Styles/BannerComponent.css'
 import { useWindowResize } from 'beautiful-react-hooks'
 import Swipe from 'react-easy-swipe';
 import { BannerComponentContext } from '../Context Providers/BannerComponentContextProvider'
+import { useHistory, useLocation } from 'react-router-dom'
 
 const BannerComponent = () => {
+
+    const history = useHistory()
 
     const [ wWidth, setWidth ] = useState(window.innerWidth)
     const [ wHeight, setHeight ] = useState(window.innerHeight)
@@ -139,6 +142,7 @@ const BannerComponent = () => {
 
                                             </div>
                                             <div
+                                            onClick = { () => history.push(`/theme/${item.name}`) }
                                             className = { classNames('toCenter', 'clickable') }
                                             style = {{
                                                 height: visibleIndexLargeScreen === index ? '100%' : '70%' ,
@@ -189,6 +193,7 @@ const BannerComponent = () => {
                                         tolerance = {20}
                                         >
                                             <div
+                                            onClick = { () => history.push(`/theme/${item.name}`) }
                                             className = { classNames('toCenter') }
                                             style = {{
                                                 height: '100%',

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react'
+import React, { useState, useContext, useRef, useReducer, useEffect } from 'react'
 import classNames from 'classnames'
 import '../Styles/SongComponent.css'
 import { useWindowResize } from 'beautiful-react-hooks'
@@ -10,8 +10,18 @@ import leftColor from '../Images/leftColor.svg'
 import rightColor from '../Images/rightColor.svg'
 import right from '../Images/right.svg'
 import left from '../Images/left.svg'
+import { useHistory, useLocation } from 'react-router-dom'
+import { ListenAgainContext } from "../Context Providers/ListenAgainContextProvider";
+import { YourFavoritesContext } from "../Context Providers/YourFavoritesContextProvider";
+import { CentralDataContext } from '../Context Providers/CentralDataContextProvider'
+import { AudioDataContext } from '../Context Providers/AudioDataContextProvider'
 
 const SongComponent = ( props ) => {
+
+    //forceUpdate
+    const [_, forceUpdate] = useReducer((x) => x + 1, 0);
+
+    const history = useHistory()
 
     const [ wWidth, setWidth ] = useState(window.innerWidth)
     const [ wHeight, setHeight ] = useState(window.innerHeight)
@@ -81,6 +91,47 @@ const SongComponent = ( props ) => {
             }
         }
     }
+
+    const setCurrentThemeQueueState = ( type ) => {
+        if ( type === 'listenAgain' ) {
+            return fetchSongQueue(listListenAgain)
+        }
+        else if ( type === 'yourFavorites' ) {
+            return fetchSongQueue(listYourFavorites)
+        }
+        else {
+            return fetchThemeQueue(type)
+        }
+    }
+
+    const { idListenAgain, listListenAgain, dataListenAgain, titleListenAgain } = useContext(ListenAgainContext)
+    const { idYourFavorites, listYourFavorites, dataYourFavorites, titleYourFavorites } = useContext(YourFavoritesContext)
+    const { fetchThemeQueue, fetchSongData, fetchSongQueue } = useContext(CentralDataContext)
+    const { currentSongQueue, setCurrentSongQueue, selectedSongImage, setSelectedImage, selectedSong, setSelectedSong, addSongsToSongQueue,
+        fetchSelectedSongImage } = useContext(AudioDataContext)
+    
+    const [ currentThemeQueue, setCurrentThemeQueue ] = useState(setCurrentThemeQueueState(props.id))
+
+    const clickPlayInTheme = () => {
+        var tempQueue = []
+        currentThemeQueue.forEach(
+            item => {
+                tempQueue.push(item.songID)
+                forceUpdate()
+            }
+        )
+        addSongsToSongQueue(tempQueue)
+        setSelectedSong(currentThemeQueue[0])
+        fetchSelectedSongImage(currentThemeQueue[0].songID)
+    }
+
+    const [ songComponentContent, setSongComponentContent ] = useState(props.content)
+
+    useEffect(
+        () => {
+            setSongComponentContent(props.content)
+        }, [props.content]
+    )
 
     return (
 
@@ -155,6 +206,7 @@ const SongComponent = ( props ) => {
                         >
                             <div
                             className = { classNames('playBackground', 'toCenter', 'clickable') }
+                            onClick = { () => clickPlayInTheme() }
                             style = {{
                                 height: wWidth < 600 ? 25 : 0.03 * wHeight,
                                 width: wWidth < 600 ? 25 : 0.03 * wHeight,
@@ -178,6 +230,7 @@ const SongComponent = ( props ) => {
                         >
                             <img
                             className = { classNames('clickable') }
+                            onClick = { () => history.push(`/theme/${props.id}`) }
                             style = {{
                                 height: wWidth < 600 ? 25 : 0.03 * wHeight,
                                 width: wWidth < 600 ? 25 : 0.03 * wHeight,
@@ -197,7 +250,7 @@ const SongComponent = ( props ) => {
             }}
             >
                 {
-                    props.content.map(
+                    songComponentContent.map(
                         ( item, index ) => {
                             return(
                                 <SquareSong 
