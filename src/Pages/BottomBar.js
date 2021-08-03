@@ -2,17 +2,20 @@ import React, { useState, useContext } from 'react'
 import { useWindowResize } from 'beautiful-react-hooks'
 import classNames from 'classnames'
 import { PlayerContext } from '../Context Providers/PlayerContextProvider'
+import { AudioDataContext } from '../Context Providers/AudioDataContextProvider'
 import music from '../Images/music.svg'
 import shuffle from '../Images/shuffle.svg'
 import shuffleColor from '../Images/shuffleColor.svg'
 import repeat from '../Images/repeat.svg'
 import repeatColor from '../Images/repeatColor.svg'
+import vinyl from '../Images/vinyl.png'
 import arrowDown from '../Images/arrowDown.svg'
 import '../Styles/BottomBar.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faBackward, faForward, faPause, faWaveSquare } from '@fortawesome/free-solid-svg-icons'
 import { useHistory, useLocation } from 'react-router-dom'
 import Range from 'react-range-progress'
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const BottomBar = () => {
 
@@ -26,7 +29,11 @@ const BottomBar = () => {
         setHeight(window.innerHeight)
     })
 
+    const [ hasPicLoaded, setHasPicLoaded ] = useState(false)
+    console.log(hasPicLoaded)
+
     const { isPlayerActive, setIsPlayerActive } = useContext(PlayerContext)
+    const { selectedSongImage } = useContext(AudioDataContext)
 
     const alterPlayerPage = () => {
         if ( isPlayerActive ) {
@@ -55,10 +62,130 @@ const BottomBar = () => {
                 display: isPlayerActive ? 'flex' : 'none',
                 height: ( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight,
                 width: wWidth > 1599 ? 1600 : '100%',
-                backgroundColor: 'pink'
             }}
             >
-
+                <div
+                className = { classNames('cdAndWaveContainer') }
+                style = {{
+                    height: (( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight) ,
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    justifyContent: 'center',
+                }}
+                >
+                    <div
+                    className = { classNames('cdAndWaveContent') }
+                    style = {{
+                        height: 0.9 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight)),
+                        width: 1.25 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight)),
+                        backgroundColor: 'white',
+                        position: 'relative',
+                        borderRadius: 7
+                    }}
+                    >
+                        <div
+                        className = { classNames('cdBGContent') }
+                        style = {{
+                            height: '100%',
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'flex-end',
+                            position: 'absolute'
+                        }}
+                        >
+                            <img
+                            style = {{
+                                height: 0.66 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight)),
+                                width: 0.66 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight)),
+                                paddingRight: '4%'
+                            }}
+                            src = {vinyl}
+                            alt = ''
+                            />
+                        </div>
+                        <div
+                        className = { classNames('cdBGContent') }
+                        style = {{
+                            height: '100%',
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'flex-start',
+                            position: 'absolute',
+                            paddingLeft: '5%'
+                        }}
+                        >
+                            
+                            <div
+                            className = { classNames('coverBGContent') }
+                            style = {{
+                                height: 0.78 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight)),
+                                width: 0.78 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight)),
+                                position: 'relative',
+                                backgroundColor: '#202020',
+                                border: '1px solid #2f3030',
+                            }}
+                            >
+                                <img
+                                style = {{
+                                    display: hasPicLoaded ? 'flex' : 'none',
+                                }}
+                                className = { classNames('coverImage') }
+                                src = {selectedSongImage}
+                                alt = ''
+                                onLoad = {() => setHasPicLoaded(true)}
+                                />
+                                <div
+                                style = {{
+                                    display: hasPicLoaded ? 'none' : 'flex',
+                                }}
+                                >
+                                <SkeletonTheme color="#202020" highlightColor="#444">
+                                <p>
+                                    <Skeleton 
+                                    height = {0.78 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight))}
+                                    width = {0.78 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight))}
+                                    />
+                                </p>
+                                </SkeletonTheme>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                className = { classNames('rangeContainer') }
+                style = {{
+                    display: wWidth > 991 ? 'none': 'flex',
+                    height: 0.05 * wHeight,
+                    width: '100%',
+                    alignItems: 'flex-end',
+                    justifyContent: 'center'
+                }}
+                >
+                    <Range
+                    value = '' //{currentAudioTime}
+                    onChange = '' //{slideRangeListener}
+                    min = {0}
+                    max = '' //{currentAudioDuration}
+                    width = {'90%'}
+                    thumbSize = {15}
+                    fillColor = {{
+                        r: 185,
+                        g: 43,
+                        b: 39,
+                        a: 1,
+                    }}
+                    trackColor = {{
+                        r: 255,
+                        g: 255,
+                        b: 255,
+                        a: 0.5,
+                    }}
+                    />
+                </div>
             </div>
             <div
             className = { classNames('bottomBarMediaControlsContainer', 'toCenter') }

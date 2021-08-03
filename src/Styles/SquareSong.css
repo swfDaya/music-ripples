@@ -1,0 +1,126 @@
+.squareSongContainer {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    font-size: 62.5%;
+}
+
+.squareSongContent {
+    display: flex;
+    flex-direction: column;
+}
+
+.squareSongSpacer {
+    height: 100%;
+}
+
+.squareImageContent {
+}
+
+.squareNameContent {
+    display: flex;
+    flex-direction: column;
+}
+
+.squareSongNameContainer {
+    display: flex;
+    flex: 3;
+    align-items: flex-end;
+}
+
+.squareSongNameContent {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    height: max-content;
+}
+
+.squareArtistNameContent {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #999999;
+    height: max-content;
+}
+
+.squareArtistNameContainer {
+    display: flex;
+    flex: 2;
+    align-items: flex-end;
+}
+
+.squareSongContentImage {
+    height: 100%;
+    min-width: 100%;
+    border-radius: 5%;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .squareSongSpacer {
+        min-width: 30px;
+    }
+    .squareImageContent {
+        height: 150px;
+    }
+    .squareNameContent {
+        height: 50px;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .squareSongSpacer {
+        min-width: 30px;
+    }
+    .squareImageContent {
+        height: 75%;
+    }
+    .squareNameContent {
+        height: 25%;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .squareSongSpacer {
+        min-width: 30px;
+    }
+    .squareImageContent {
+        height: 75%;
+    }
+    .squareNameContent {
+        height: 25%;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .squareSongSpacer {
+        min-width: 30px;
+    }
+    .squareImageContent {
+        height: 75%;
+    }
+    .squareNameContent {
+        height: 25%;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .squareSongSpacer {
+        min-width: 30px;
+    }
+    .squareImageContent {
+        height: 75%;
+    }
+    .squareNameContent {
+        height: 25%;
+    }
+}

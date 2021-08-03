@@ -10,6 +10,11 @@ const BannerComponent = () => {
     const [ wWidth, setWidth ] = useState(window.innerWidth)
     const [ wHeight, setHeight ] = useState(window.innerHeight)
 
+    useWindowResize((event: React.SyntheticEvent) => {
+        setWidth(window.innerWidth)
+        setHeight(window.innerHeight)
+    })
+
     const bannerScroll = useRef(null)
     const bannerScrollLargeScreen = useRef(null)
     const [ visibleIndex, setVisibleIndex ] = useState(0)
@@ -71,21 +76,11 @@ const BannerComponent = () => {
         }
     }
 
-    useWindowResize((event: React.SyntheticEvent) => {
-        setWidth(window.innerWidth)
-        setHeight(window.innerHeight)
-    })
-
     return (
 
         <div
         className = { classNames('bannerContainer') }
         >
-            <div
-            className = { classNames('bannerSpacer') }
-            >
-
-            </div>
             <div
             className = { classNames('bannerContainerTop', 'toCenter') }
             >
@@ -94,7 +89,8 @@ const BannerComponent = () => {
                 style = {{
                     height: '100%',
                     width: ( wWidth > 1599 ? 1600 : wWidth ) - (0.065 * wHeight),
-                    scrollBehavior: 'smooth'
+                    scrollBehavior: 'smooth',
+                    paddingLeft: wWidth > 991 ? (( wWidth > 1599 ? 1600 : wWidth ) - (0.065 * wHeight)) * 0.3 : 0
                 }}
                 >
                     {titleBannerContent}

@@ -4,8 +4,10 @@
 }
 
 .middleContainer {
-    background-image: linear-gradient( #040404, #1b1e1e );
-    color: white
+    background-color: #060606;
+    /* background-image: linear-gradient( #040404, #1b1e1e ); */
+    color: white;
+    overflow: scroll;
 }
 
 .bottomBarContainer {

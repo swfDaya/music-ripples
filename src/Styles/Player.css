@@ -1,41 +1,49 @@
-.bottomBar {
+.player {
     display: flex;
     flex-direction: column;
-    font-size: 6.25%;
+    font-size: 62.5%;
 }
 
-.bottomBarMediaControlsContainer {
-    /* border-top: 1px solid #2f3030; */
+.songContainerSpacer {
+    display: flex;
+    flex-direction: column;
 }
 
-.bottomBarMediaControls {
+.playerContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.songContainer {
     display: flex;
     flex-direction: row;
 }
 
-.bottomBarRectangle {
+.spacerPlayer {
+    min-height: 5%;
+    width: 100%;
 }
 
-.bottomBarNameContainer {
-}
-
-.bottomBarNameName {
+.songNameContent {
+    height: max-content;
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: white;
-    height: max-content;
 }
 
-.bottomBarPlayer {
-    flex-direction: column;
+.songNameContainer {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    overflow: hidden;
 }
 
-.coverImage {
-    height: 100%;
-    width: 100%;
+.songNameRectangle {
+    font-size: 1rem;
+}
+.songNameContent {
+    font-size: 1rem;
 }
 
 /* Extra small devices (phones, 600px and down) */
