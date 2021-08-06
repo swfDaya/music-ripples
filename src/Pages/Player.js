@@ -22,7 +22,7 @@ const Player = () => {
     const { isPlayerActive, setIsPlayerActive } = useContext(PlayerContext)
     const { fetchSongData, fetchSongQueue } = useContext(CentralDataContext)
     const { currentSongQueue, setCurrentSongQueue, selectedSongImage, setSelectedImage, selectedSong, setSelectedSong, fetchSelectedSongImage,
-            hasPicLoaded, setHasPicLoaded } = useContext(AudioDataContext)
+            hasPicLoaded, setHasPicLoaded, fetchSong, setIsAudioPlaying, audioRef } = useContext(AudioDataContext)
     const { listYourFavorites, alterYourFavorites } = useContext(YourFavoritesContext)
 
     const tempArray = [1,2,3,4,5,6,7,8,9,1,2,3,4,5]
@@ -36,9 +36,12 @@ const Player = () => {
     }
 
     const onSongClickInPlayerQueue = ( songID ) => {
+        audioRef.current.currentTime = 0
+        setIsAudioPlaying(false)
         setHasPicLoaded(false)
         setSelectedSong(...fetchSongData(songID))
         fetchSelectedSongImage(songID)
+        fetchSong(songID)
     }
 
     const playerQueue = useRef(null)

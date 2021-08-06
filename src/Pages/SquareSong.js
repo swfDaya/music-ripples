@@ -22,17 +22,23 @@ const SquareSong = ( props ) => {
     const { fetchSongData } = useContext(CentralDataContext)
     const [ squareSongContent, setSquareSongContent ] = useState(...fetchSongData(props.id))
     const { currentSongQueue, setCurrentSongQueue, selectedSongImage, setSelectedImage, selectedSong, setSelectedSong, fetchSelectedSongImage,
-        hasPicLoaded, setHasPicLoaded, addToSongQueue } = useContext(AudioDataContext)
+        hasPicLoaded, setHasPicLoaded, addToSongQueue, audioRef, setIsAudioPlaying, fetchSong, isFirstTime, setIsFirstTime, getSources } = useContext(AudioDataContext)
 
     const [ hasSquarePicLoaded, setHasSquarePicLoaded ] = useState(false)
 
     const onSquareClick = ( id ) => {
         if ( props.type === 'song' ) {
-            setHasPicLoaded(false)
-            setSelectedSong(...fetchSongData(id))
-            fetchSelectedSongImage(id)
-            addToSongQueue(id)
-            history.push('/player')
+            if ( isFirstTime ) {
+                getSources()
+                setIsFirstTime(false)
+            }
+        setIsAudioPlaying(false)
+        fetchSong(id)
+        setHasPicLoaded(false)
+        setSelectedSong(...fetchSongData(id))
+        fetchSelectedSongImage(id)
+        addToSongQueue(id)
+        history.push('/player')
         }
         else {
             history.push(`/theme/${id}`)
@@ -65,18 +71,17 @@ const SquareSong = ( props ) => {
             >
                 <div
                 className = { classNames( 'squareImageContent', 'clickable' ) }
+                onClick = { () => onSquareClick( props.id ) }
                 style = {{
                     minWidth: wWidth > 559 ? 0.19 * wHeight : '150px',
                     maxWidth: wWidth > 559 ? 0.19 * wHeight : '150px'
                 }}
                 >
                     <img
-                    onClick = { () => onSquareClick( props.id ) }
                     className = { classNames('squareSongContentImage') }
                     style = {{
                         display: hasSquarePicLoaded ? 'flex' : 'none'
                     }}
-                    // onClick = {() => showPlayer()}
                     src = {props.source}
                     alt =''
                     onLoad = {() => setHasSquarePicLoaded(true)}

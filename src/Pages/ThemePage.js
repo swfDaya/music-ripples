@@ -39,7 +39,7 @@ const ThemePage = () => {
     const { idYourFavorites, listYourFavorites, dataYourFavorites, titleYourFavorites, alterYourFavorites } = useContext(YourFavoritesContext)
     const { fetchThemeQueue, fetchSongData, fetchSongQueue } = useContext(CentralDataContext)
     const { currentSongQueue, setCurrentSongQueue, selectedSongImage, setSelectedImage, selectedSong, setSelectedSong, addSongsToSongQueue,
-        fetchSelectedSongImage } = useContext(AudioDataContext)
+        fetchSelectedSongImage, isFirstTime, getSources, setIsFirstTime, audioRef, setIsAudioPlaying, fetchSong, addToSongQueue  } = useContext(AudioDataContext)
 
     const setCurrentThemeQueueState = ( type ) => {
         if ( type === 'listenAgain' ) {
@@ -104,9 +104,14 @@ const ThemePage = () => {
                 forceUpdate()
             }
         )
+        if ( isFirstTime ) {
+            getSources()
+            setIsFirstTime(false)
+        }
         addSongsToSongQueue(tempQueue)
         setSelectedSong(currentThemeQueue[0])
         fetchSelectedSongImage(currentThemeQueue[0].songID)
+        fetchSong(currentThemeQueue[0].songID)
     }
 
     const shuffleThemeQueue = () =>  {
@@ -115,6 +120,19 @@ const ThemePage = () => {
             [currentThemeQueue[i], currentThemeQueue[j]] = [currentThemeQueue[j], currentThemeQueue[i]];
             forceUpdate()
         }
+    }
+
+    const onSongNameClickInThemePage = ( id ) => {
+        if ( isFirstTime ) {
+            getSources()
+            setIsFirstTime(false)
+        }
+        setIsAudioPlaying(false)
+        fetchSong(id)
+        setHasPicLoaded(false)
+        setSelectedSong(...fetchSongData(id))
+        fetchSelectedSongImage(id)
+        addToSongQueue(id)
     }
 
     return (
@@ -201,6 +219,7 @@ const ThemePage = () => {
                         className = { classNames('themeQueueButtonsContainer') }
                         >
                             <div
+                            onClick = { () => clickPlayInTheme() }
                             className = { classNames('themeQueueButtonsSquare', 'clickable', 'toCenter') }
                             style = {{
                                 height: wWidth < 599 ? '37px' : ( 0.05 * wHeight ),
@@ -208,7 +227,6 @@ const ThemePage = () => {
                             }}
                             >
                                 <FontAwesomeIcon
-                                onClick = { () => clickPlayInTheme() }
                                 style = {{
                                     height: '40%', width: '40%', color: '#b92b27'
                                 }}
@@ -295,7 +313,8 @@ const ThemePage = () => {
                                     }}
                                     >
                                         <div
-                                        className = { classNames('songNameContainer') }
+                                        className = { classNames('songNameContainer', 'clickable') }
+                                        onClick = { () => onSongNameClickInThemePage(item.songID) }
                                         >
                                             <div
                                             className = { classNames('songNameContent') }

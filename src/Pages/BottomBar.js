@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useWindowResize } from 'beautiful-react-hooks'
 import classNames from 'classnames'
 import { PlayerContext } from '../Context Providers/PlayerContextProvider'
@@ -12,7 +12,7 @@ import vinyl from '../Images/vinyl.png'
 import arrowDown from '../Images/arrowDown.svg'
 import '../Styles/BottomBar.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faBackward, faForward, faPause, faWaveSquare } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faBackward, faForward, faPause, faWaveSquare, fas } from '@fortawesome/free-solid-svg-icons'
 import { useHistory, useLocation } from 'react-router-dom'
 import Range from 'react-range-progress'
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -32,7 +32,9 @@ const BottomBar = () => {
 
     const { fetchSongData, fetchSongQueue } = useContext(CentralDataContext)
     const { isPlayerActive, setIsPlayerActive } = useContext(PlayerContext)
-    const { selectedSongImage, selectedSong, hasPicLoaded, setHasPicLoaded, shufflePlayerArray, setSelectedSong, fetchSelectedSongImage } = useContext(AudioDataContext)
+    const { selectedSongImage, selectedSong, hasPicLoaded, setHasPicLoaded, shufflePlayerArray, setSelectedSong, fetchSelectedSongImage,
+            isWavesActive, setISWavesActive, playSongHandler, isAudioPlaying, setIsAudioPlaying, currentAudio, currentAudioTime, 
+            slideRangeListener, currentAudioDuration, audioRef, currentSongQueue, fetchSong, addToSongQueue, isRepeatActive, setIsRepeatActive } = useContext(AudioDataContext)
 
     const alterPlayerPage = () => {
         if ( isPlayerActive ) {
@@ -46,11 +48,48 @@ const BottomBar = () => {
     }
 
     const shufflePlayerQueue = () => {
+        setIsAudioPlaying(false)
         setHasPicLoaded(false)
         var tempSongID = shufflePlayerArray()
         setSelectedSong(...fetchSongData(tempSongID))
         fetchSelectedSongImage(tempSongID)
     }
+
+    const previousSong = () => {
+        let currentSongIndex = currentSongQueue.findIndex(item => item === selectedSong.songID)
+        if ( currentSongIndex > 0 ) {
+            setIsAudioPlaying(false)
+            fetchSong(currentSongQueue[currentSongIndex - 1])
+            setHasPicLoaded(false)
+            setSelectedSong(...fetchSongData(currentSongQueue[currentSongIndex - 1]))
+            fetchSelectedSongImage(currentSongQueue[currentSongIndex - 1])
+        }
+    }
+
+    const nextSong = () => {
+        let currentSongIndex = currentSongQueue.findIndex(item => item === selectedSong.songID)
+        if ( currentSongIndex + 1 < currentSongQueue.length ) {
+            setIsAudioPlaying(false)
+            fetchSong(currentSongQueue[currentSongIndex + 1])
+            setHasPicLoaded(false)
+            setSelectedSong(...fetchSongData(currentSongQueue[currentSongIndex + 1]))
+            fetchSelectedSongImage(currentSongQueue[currentSongIndex + 1])
+        }
+    }
+
+    useEffect(
+        () => {
+            if ( currentAudioTime === currentAudioDuration && isAudioPlaying ) {
+                setTimeout(
+                    isRepeatActive ?
+                    audioRef.current.currentTime = 0
+                    :
+                    () => nextSong()
+                    , 1000
+                )
+            }
+        }, [currentAudioTime]
+    )
 
     return (
 
@@ -87,7 +126,8 @@ const BottomBar = () => {
                         width: 1.25 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight)),
                         backgroundColor: 'white',
                         position: 'relative',
-                        borderRadius: 7
+                        borderRadius: 7,
+                        display: isWavesActive ? 'none' : 'flex'
                     }}
                     >
                         <div
@@ -98,18 +138,28 @@ const BottomBar = () => {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'flex-end',
-                            position: 'absolute'
+                            position: 'absolute',
+                            backgroundColor: '',
                         }}
                         >
-                            <img
+                            <div
                             style = {{
                                 height: 0.66 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight)),
                                 width: 0.66 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight)),
-                                paddingRight: '4%'
+                                backgroundColor: '', marginRight: '4%'
                             }}
-                            src = {vinyl}
-                            alt = ''
-                            />
+                            >
+                                <img
+                                style = {{
+                                    height: 0.66 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight)),
+                                    width: 0.66 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight)),
+                                    transform: `rotate(${currentAudioTime * 20}deg)`,
+                                    transition: 'all 1s linear'
+                                }}
+                                src = {vinyl}
+                                alt = ''
+                                />
+                            </div>
                         </div>
                         <div
                         className = { classNames('cdBGContent') }
@@ -160,6 +210,24 @@ const BottomBar = () => {
                             </div>
                         </div>
                     </div>
+                    <div
+                    style = {{
+                        height: 0.9 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight)),
+                        width: 1.25 * ((( isPlayerActive ? ( wWidth > 991 ? 0.3 : 0.35 ) : 0.1 ) * wHeight) - (( wWidth > 991 ? 0 : 0.05 ) * wHeight)),
+                        position: 'relative',
+                        display: isWavesActive ? 'flex' : 'none'
+                    }}
+                    >
+                        <canvas
+                        id = 'canvas'
+                        style = {{
+                            height: '100%',
+                            width: '100%',
+                        }}
+                        >
+
+                        </canvas>
+                    </div>
                 </div>
                 <div
                 className = { classNames('rangeContainer') }
@@ -172,10 +240,10 @@ const BottomBar = () => {
                 }}
                 >
                     <Range
-                    value = '' //{currentAudioTime}
-                    onChange = '' //{slideRangeListener}
+                    value = {currentAudioTime}
+                    onChange = {slideRangeListener}
                     min = {0}
-                    max = '' //{currentAudioDuration}
+                    max = {currentAudioDuration}
                     width = {'90%'}
                     thumbSize = {15}
                     fillColor = {{
@@ -269,13 +337,14 @@ const BottomBar = () => {
                     }}
                     >
                         <img
+                        onClick = { () => setIsRepeatActive( isRepeatActive ? false : true ) }
                         className = { classNames('clickable') }
                         style = {{
                             height: '50%',
                             width: '50%',
                             display: isPlayerActive ? 'flex' : 'none', 
                         }}
-                        src = { repeat }
+                        src = { isRepeatActive ? repeatColor : repeat }
                         alt = ''
                         />
                     </div>
@@ -286,9 +355,11 @@ const BottomBar = () => {
                     }}
                     >
                         <FontAwesomeIcon
-                        className = { classNames('clickable') }
+                        onClick = { () => previousSong() }
+                        className = { classNames(( currentSongQueue.findIndex( item => item === selectedSong.songID ) === 0 ) ? '' : 'clickable') }
                         style = {{
-                            height: '50%', width: '50%', color: '#b92b27'
+                            height: '50%', width: '50%', 
+                            color: ( currentSongQueue.findIndex( item => item === selectedSong.songID ) === 0 ) ? '#7f7f7f' : '#b92b27'
                         }}
                         icon = {faBackward}
                         />
@@ -300,11 +371,13 @@ const BottomBar = () => {
                     }}
                     >
                         <FontAwesomeIcon
+                        onClick = { () => playSongHandler() }
                         className = { classNames('clickable') }
                         style = {{
-                            height: '50%', width: '50%', color: '#b92b27'
+                            height: '50%', width: '50%', 
+                            color: currentAudio ? '#b92b27' : '#7f7f7f'
                         }}
-                        icon = {faPlay}
+                        icon = { isAudioPlaying ? faPause : faPlay}
                         />
                     </div>
                     <div
@@ -314,9 +387,11 @@ const BottomBar = () => {
                     }}
                     >
                         <FontAwesomeIcon
-                        className = { classNames('clickable') }
+                        onClick = { () => nextSong() }
+                        className = { classNames(( currentSongQueue.findIndex( item => item === selectedSong.songID ) + 1 === currentSongQueue.length ) ? '' : 'clickable') }
                         style = {{
-                            height: '50%', width: '50%', color: '#b92b27'
+                            height: '50%', width: '50%', 
+                            color: ( currentSongQueue.findIndex( item => item === selectedSong.songID ) + 1 === currentSongQueue.length ) ? '#7f7f7f' : '#b92b27'
                         }}
                         icon = {faForward}
                         />
@@ -329,9 +404,11 @@ const BottomBar = () => {
                     >
                         <FontAwesomeIcon
                         className = { classNames('clickable') }
+                        onClick = { () => setISWavesActive( isWavesActive ? false : true ) }
                         style = {{
-                            height: '50%', width: '50%', color: 'white',
+                            height: '50%', width: '50%',
                             display: isPlayerActive ? 'flex' : 'none', 
+                            color: isWavesActive ? '#b92b27' : 'white',
                         }}
                         icon = {faWaveSquare}
                         />
@@ -363,10 +440,10 @@ const BottomBar = () => {
                 }}
                 >
                     <Range
-                    value = '' //{currentAudioTime}
-                    onChange = '' //{slideRangeListener}
+                    value = {currentAudioTime}
+                    onChange = {slideRangeListener}
                     min = {0}
-                    max = '' //{currentAudioDuration}
+                    max = {currentAudioDuration}
                     width = {'90%'}
                     thumbSize = {15}
                     fillColor = {{

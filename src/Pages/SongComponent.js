@@ -108,7 +108,7 @@ const SongComponent = ( props ) => {
     const { idYourFavorites, listYourFavorites, dataYourFavorites, titleYourFavorites } = useContext(YourFavoritesContext)
     const { fetchThemeQueue, fetchSongData, fetchSongQueue } = useContext(CentralDataContext)
     const { currentSongQueue, setCurrentSongQueue, selectedSongImage, setSelectedImage, selectedSong, setSelectedSong, addSongsToSongQueue,
-        fetchSelectedSongImage } = useContext(AudioDataContext)
+        fetchSelectedSongImage, fetchSong, isFirstTime, getSources, setIsFirstTime } = useContext(AudioDataContext)
     
     const [ currentThemeQueue, setCurrentThemeQueue ] = useState(setCurrentThemeQueueState(props.id))
 
@@ -120,9 +120,14 @@ const SongComponent = ( props ) => {
                 forceUpdate()
             }
         )
+        if ( isFirstTime ) {
+            getSources()
+            setIsFirstTime(false)
+        }
         addSongsToSongQueue(tempQueue)
         setSelectedSong(currentThemeQueue[0])
         fetchSelectedSongImage(currentThemeQueue[0].songID)
+        fetchSong(currentThemeQueue[0].songID)
     }
 
     const [ songComponentContent, setSongComponentContent ] = useState(props.content)
