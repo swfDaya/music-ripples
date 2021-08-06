@@ -46,6 +46,7 @@ const TopBar = () => {
             }}
             >
                 <img
+                onClick = {() => selectTab('/home')}
                 className = { classNames('clickable') }
                 style = {{
                     height: '35%',
