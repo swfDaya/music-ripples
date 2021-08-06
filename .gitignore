@@ -23,3 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 src/Pages/firebase.js
 src/Context Providers/CentralDataContextProvider.js
+.firebaserc
+firebase.json
+storage.rules

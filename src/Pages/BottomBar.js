@@ -53,6 +53,7 @@ const BottomBar = () => {
         var tempSongID = shufflePlayerArray()
         setSelectedSong(...fetchSongData(tempSongID))
         fetchSelectedSongImage(tempSongID)
+        fetchSong(tempSongID)
     }
 
     const previousSong = () => {
