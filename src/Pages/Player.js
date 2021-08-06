@@ -22,7 +22,7 @@ const Player = () => {
     const { isPlayerActive, setIsPlayerActive } = useContext(PlayerContext)
     const { fetchSongData, fetchSongQueue } = useContext(CentralDataContext)
     const { currentSongQueue, setCurrentSongQueue, selectedSongImage, setSelectedImage, selectedSong, setSelectedSong, fetchSelectedSongImage,
-            hasPicLoaded, setHasPicLoaded, fetchSong, setIsAudioPlaying, audioRef } = useContext(AudioDataContext)
+            hasPicLoaded, setHasPicLoaded, fetchSong, setIsAudioPlaying, audioRef, isAudioPlaying } = useContext(AudioDataContext)
     const { listYourFavorites, alterYourFavorites } = useContext(YourFavoritesContext)
 
     const tempArray = [1,2,3,4,5,6,7,8,9,1,2,3,4,5]
@@ -32,7 +32,7 @@ const Player = () => {
     const fetchTimeFormat = ( runTime ) => {
         const minute = Math.floor(runTime/60)
         const second = runTime - (minute * 60)
-        return minute + ':' + (second < 10 ? '0' + second  : second)
+        return isNaN(minute) || isNaN(second) || (runTime < 0) ? '0:00' : minute + ':' + (second < 10 ? '0' + second  : second)
     }
 
     const onSongClickInPlayerQueue = ( songID ) => {
@@ -110,7 +110,12 @@ const Player = () => {
                                             minWidth: 0.125 * wHeight,
                                         }}
                                         >
-                                            {fetchTimeFormat(item.runTime)}
+                                            {fetchTimeFormat(
+                                                item.songID === selectedSong.songID ?
+                                                isAudioPlaying ? Math.floor(selectedSong.runTime - (audioRef ? audioRef.current.currentTime : 0)) : item.runTime
+                                                :
+                                                item.runTime
+                                                )}
                                         </div>
                                         <div
                                         className = { classNames('songNameSquare', 'toCenter') }
