@@ -102,15 +102,16 @@ const BannerComponent = () => {
             <div
             className = { classNames('bannerContainerMiddle', 'toCenter') }
             >
-                {
-                    wWidth > 991 ? 
+                {/* {
+                    wWidth > 991 ?  */}
                     <div
                     className = { classNames('bannerLargeScreenContainer') }
                     ref = {bannerScrollLargeScreen}
                     style = {{
                         height: '100%',
                         width: ( wWidth > 1599 ? 1600 : wWidth ) - (0.065 * wHeight),
-                        scrollBehavior: 'smooth'
+                        scrollBehavior: 'smooth',
+                        display: wWidth > 991 ? 'flex' : 'none'
                     }}
                     >
                         <div
@@ -173,14 +174,15 @@ const BannerComponent = () => {
                         >
                         </div>
                     </div>
-                    :
+                    {/* : */}
                     <div
                     className = { classNames('bannerScrollContainer') }
                     ref = {bannerScroll}
                     style = {{
                         height: '100%',
                         width: Math.floor(wWidth - (0.065 * wHeight)),
-                        scrollBehavior: 'smooth'
+                        scrollBehavior: 'smooth',
+                        display: wWidth > 991 ? 'none' : 'flex'
                     }}
                     >
                         {
@@ -216,7 +218,7 @@ const BannerComponent = () => {
                             )
                         }
                     </div>
-                }
+                {/* } */}
             </div>
             <div
             className = { classNames('bannerContainerBottom') }
